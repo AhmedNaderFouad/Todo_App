@@ -11,7 +11,7 @@ The app helps users manage their daily tasks efficiently with an easy-to-use int
  ### 📸 Screenshots 🔽
  
 
-
+<img src="splash screen" width="250"/>
 
 
 
