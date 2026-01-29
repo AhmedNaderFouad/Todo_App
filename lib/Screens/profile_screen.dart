@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:todo_app/Services/storage_service.dart';
 import 'package:todo_app/custom_widgets/app_button.dart';
 import 'package:todo_app/custom_widgets/app_text_form_field.dart';
+import 'package:todo_app/main.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String name;
@@ -128,8 +129,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: const Color(0xffF5F5F5),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -142,8 +144,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.wb_sunny_outlined, color: Colors.indigo),
-            onPressed: () {},
+            icon: Icon(
+              isDark ? Icons.nightlight_round : Icons.wb_sunny_outlined,
+              color: Colors.indigo,
+            ),
+            onPressed: () {
+              MyApp.of(context).changeTheme(
+                isDark ? ThemeMode.light : ThemeMode.dark,
+              );
+            },
           ),
         ],
       ),

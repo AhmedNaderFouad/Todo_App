@@ -8,6 +8,7 @@ import 'package:todo_app/Services/storage_service.dart';
 import 'package:todo_app/custom_widgets/app_button.dart';
 import 'package:todo_app/custom_widgets/task_card.dart';
 import 'package:todo_app/custom_widgets/calendar_item.dart';
+import 'package:todo_app/main.dart';
 
 class HomeScreen extends StatefulWidget {
   final String name;
@@ -89,7 +90,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }).toList();
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
@@ -106,7 +106,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           "Hello, $currentName",
                           style: const TextStyle(
                             fontSize: 24,
-                            color: Colors.indigo,
                             fontWeight: FontWeight.bold,
                           ),
                           maxLines: 1,
@@ -114,12 +113,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         const Text(
                           "Have a Nice Day",
-                          style: TextStyle(fontSize: 17, color: Colors.black),
+                          style: TextStyle(fontSize: 17),
                         ),
                       ],
                     ),
                   ),
-                  const Spacer(),
                   GestureDetector(
                     onTap: () async {
                       final result = await Navigator.push(
@@ -140,7 +138,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     child: CircleAvatar(
                       radius: 30,
-                      backgroundColor: Colors.indigo,
                       backgroundImage: currentImagePath != null
                           ? FileImage(File(currentImagePath!))
                           : null,

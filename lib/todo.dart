@@ -9,28 +9,25 @@ class Todo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: FutureBuilder<Map<String, dynamic>>(
-        future: _initApp(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const SplashScreen();
-          }
-
-          if (snapshot.hasData && snapshot.data != null) {
-            final data = snapshot.data!;
-            if (data['isLoggedIn'] == true) {
-              return HomeScreen(
-                name: data['name'] ?? '',
-                imagePath: data['imagePath'],
-              );
-            }
-          }
-
+    return FutureBuilder<Map<String, dynamic>>(
+      future: _initApp(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return const SplashScreen();
-        },
-      ),
+        }
+
+        if (snapshot.hasData && snapshot.data != null) {
+          final data = snapshot.data!;
+          if (data['isLoggedIn'] == true) {
+            return HomeScreen(
+              name: data['name'] ?? '',
+              imagePath: data['imagePath'],
+            );
+          }
+        }
+
+        return const SplashScreen();
+      },
     );
   }
 
