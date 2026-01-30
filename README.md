@@ -12,32 +12,22 @@ The app helps users manage their daily tasks efficiently with an easy-to-use int
  
 
 <p align="center">
-  <img src="splash_screen.jpeg" width="220"/>
-  <img src="login_screen.jpeg" width="220"/>
-  <img src="home_screen.jpeg" width="220"/>
+  <img src="splash_screen.jpeg" width="250"/>
+  <img src="login_screen.jpeg" width="250"/>
+  <img src="home_screen.jpeg" width="250"/>
 </p>
 
 <p align="center">
-  <img src="add_task_screen.jpeg" width="220"/>
-  <img src="edit_screen.jpeg" width="220"/>
-  <img src="dark_mode_screen.jpeg" width="220"/>
+  <img src="add_task_screen.jpeg" width="250"/>
+  <img src="edit_screen.jpeg" width="250"/>
+  <img src="dark_mode_screen.jpeg" width="250"/>
 </p>
-
-
-
-
-
-
 
 ---
 
 ### 🎥 Demo Video
 > 🔽 Add your demo video here
 
-<!-- 
-Example:
-[Watch Demo Video](https://link-to-your-video)
--->
 
 ---
 
