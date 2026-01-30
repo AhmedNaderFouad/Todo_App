@@ -11,7 +11,26 @@ The app helps users manage their daily tasks efficiently with an easy-to-use int
  ### 📸 Screenshots 🔽
  
 
-<img src="splash screen" width="250"/>
+
+### Splash Screen
+![Splash Screen](splash_screen.jpeg)
+
+### Login Screen
+![Login Screen](login_screen.jpeg)
+
+### Home Screen
+![Home Screen](home_screen.jpeg)
+
+### Add Task
+![Add Task](add_task_screen.jpeg)
+
+### Edit Task
+![Edit Task](edit_screen.jpeg)
+
+### Dark Mode
+![Dark Mode](dark_mode.jpeg)
+
+
 
 
 
