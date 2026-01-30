@@ -13,22 +13,22 @@ The app helps users manage their daily tasks efficiently with an easy-to-use int
 
 
 ### Splash Screen
-![Splash Screen](splash_screen.jpeg)
+![splash screen](splash_screen.jpeg)
 
 ### Login Screen
-![Login Screen](login_screen.jpeg)
+![login screen](login_screen.jpeg)
 
 ### Home Screen
-![Home Screen](home_screen.jpeg)
+![home screen](home_screen.jpeg)
 
 ### Add Task
-![Add Task](add_task_screen.jpeg)
+![add ask](add_task_screen.jpeg)
 
 ### Edit Task
-![Edit Task](edit_screen.jpeg)
+![edit task](edit_screen.jpeg)
 
 ### Dark Mode
-![Dark Mode](dark_mode.jpeg)
+![dark mode](dark_mode.jpeg)
 
 
 
