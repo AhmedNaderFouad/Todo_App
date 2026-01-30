@@ -25,8 +25,12 @@ The app helps users manage their daily tasks efficiently with an easy-to-use int
 
 ---
 
-### 🎥 Demo Video
-> 🔽 Add your demo video here
+### 🎥 Demo Video 🔽
+
+
+https://github.com/user-attachments/assets/239fc602-8e58-4e3d-a576-345d168408b8
+
+
 
 
 ---
