@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todo_app/Models/task_model.dart';
+import 'package:todo_app/Models/user_model.dart';
+import 'package:todo_app/Services/task_service.dart';
+import 'package:todo_app/Services/user_service.dart';
 import 'package:todo_app/themes.dart';
 import 'package:todo_app/todo.dart';
+
+final userService = UserService();
+final taskService = TaskService();
 
 void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(TaskModelAdapter());
-  await Hive.openBox<TaskModel>('tasks');
+  Hive.registerAdapter(UserModelAdapter());
+  await userService.init();
+  await taskService.init();
 
   runApp(const MyApp());
 }
