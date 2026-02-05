@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:todo_app/Models/task_model.dart';
 import 'package:todo_app/custom_widgets/app_button.dart';
 import 'package:todo_app/custom_widgets/app_text_form_field.dart';
@@ -13,7 +14,7 @@ class AddTaskScreen extends StatefulWidget {
 class _AddTaskScreenState extends State<AddTaskScreen> {
   var formKey = GlobalKey<FormState>();
   int selectedColorIndex = 0;
-  List<MaterialColor> taskColors = [Colors.red, Colors.blue, Colors.green];
+  List<Color> taskColors = [Colors.red, Colors.blue, Colors.green];
 
   late TextEditingController titleController;
   late TextEditingController descriptionController;
@@ -27,16 +28,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     titleController = TextEditingController();
     descriptionController = TextEditingController();
 
-
     DateTime now = DateTime.now();
     dateController = TextEditingController(
       text: "${now.day}/${now.month}/${now.year}",
     );
 
-
     startTimeController = TextEditingController();
     endTimeController = TextEditingController();
-
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
@@ -49,7 +47,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   String _getOppositeTime(BuildContext context) {
     TimeOfDay now = TimeOfDay.now();
     final localizations = MaterialLocalizations.of(context);
-
 
     String formattedTime = now.format(context);
     if (now.period == DayPeriod.am) {
@@ -294,7 +291,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   title: "confirm",
                   onPressed: () {
                     if (formKey.currentState?.validate() ?? false) {
-                      tasks.add(
+                      Box<TaskModel> tasksBox = Hive.box<TaskModel>('tasks');
+                      tasksBox.add(
                         TaskModel(
                           taskTitle: titleController.text,
                           taskDescription: descriptionController.text,
@@ -302,7 +300,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                           taskStartTime: startTimeController.text,
                           taskEndTime: endTimeController.text,
                           taskStatusText: "todo",
-                          color: taskColors[selectedColorIndex],
+                          color: taskColors[selectedColorIndex].value,
                         ),
                       );
                       Navigator.pop(context, dateController.text);

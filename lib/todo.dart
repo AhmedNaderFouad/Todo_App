@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/Models/task_model.dart' as model;
 import 'package:todo_app/Screens/splash_screen.dart';
 import 'package:todo_app/Screens/home_screen.dart';
 import 'package:todo_app/Services/storage_service.dart';
@@ -33,8 +32,6 @@ class Todo extends StatelessWidget {
 
   Future<Map<String, dynamic>> _initApp() async {
     try {
-      model.tasks = await StorageService.loadTasks();
-
       bool isLoggedIn = await StorageService.isUserLoggedIn();
       Map<String, String?> userData = await StorageService.loadUser();
 

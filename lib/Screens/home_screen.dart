@@ -1,14 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lottie/lottie.dart';
-import 'package:todo_app/Models/task_model.dart' as model;
+import 'package:todo_app/Models/task_model.dart';
 import 'package:todo_app/Screens/add_task_screen.dart';
 import 'package:todo_app/Screens/profile_screen.dart';
-import 'package:todo_app/Services/storage_service.dart';
 import 'package:todo_app/custom_widgets/app_button.dart';
-import 'package:todo_app/custom_widgets/task_card.dart';
 import 'package:todo_app/custom_widgets/calendar_item.dart';
-import 'package:todo_app/main.dart';
+import 'package:todo_app/custom_widgets/task_card.dart';
 
 class HomeScreen extends StatefulWidget {
   final String name;
@@ -60,35 +59,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-    DateTime today = DateTime(now.year, now.month, now.day);
-
-    Set<DateTime> uniqueDates = {today};
-    for (var task in model.tasks) {
-      List<String> parts = task.taskDate.split('/');
-      if (parts.length == 3) {
-        int day = int.parse(parts[0]);
-        int month = int.parse(parts[1]);
-        int year = int.parse(parts[2]);
-        uniqueDates.add(DateTime(year, month, day));
-      }
-    }
-
-    List<DateTime> sortedDates = uniqueDates.toList()..sort();
-
-    final filteredTasks = model.tasks.where((task) {
-      List<String> parts = task.taskDate.split('/');
-      if (parts.length == 3) {
-        int day = int.parse(parts[0]);
-        int month = int.parse(parts[1]);
-        int year = int.parse(parts[2]);
-        return day == selectedDate.day &&
-            month == selectedDate.month &&
-            year == selectedDate.year;
-      }
-      return false;
-    }).toList();
-
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -156,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "${getMonthName(now.month)} ${now.day}, ${now.year}",
+                        "${getMonthName(DateTime.now().month)} ${DateTime.now().day}, ${DateTime.now().year}",
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -196,58 +166,93 @@ class _HomeScreenState extends State<HomeScreen> {
                             });
                           }
                         }
-
-                        await StorageService.saveTasks(model.tasks);
-                        setState(() {});
                       },
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 30),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: sortedDates.map((date) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: CalendarItem(
-                        month: getMonthName(date.month),
-                        day: date.day.toString(),
-                        weekDay: getDayName(date.weekday),
-                        isSelected:
-                            selectedDate.day == date.day &&
-                            selectedDate.month == date.month &&
-                            selectedDate.year == date.year,
-                        onTap: () => setState(() => selectedDate = date),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-              const SizedBox(height: 30),
-              if (filteredTasks.isEmpty)
-                Center(
-                  child: Column(
+              ValueListenableBuilder<Box<TaskModel>>(
+                valueListenable: Hive.box<TaskModel>('tasks').listenable(),
+                builder: (context, box, _) {
+                  final tasks = box.values.toList().cast<TaskModel>();
+                  DateTime now = DateTime.now();
+                  DateTime today = DateTime(now.year, now.month, now.day);
+
+                  Set<DateTime> uniqueDates = {today};
+                  for (var task in tasks) {
+                    List<String> parts = task.taskDate.split('/');
+                    if (parts.length == 3) {
+                      int day = int.parse(parts[0]);
+                      int month = int.parse(parts[1]);
+                      int year = int.parse(parts[2]);
+                      uniqueDates.add(DateTime(year, month, day));
+                    }
+                  }
+
+                  List<DateTime> sortedDates = uniqueDates.toList()..sort();
+
+                  final filteredTasks = tasks.where((task) {
+                    List<String> parts = task.taskDate.split('/');
+                    if (parts.length == 3) {
+                      int day = int.parse(parts[0]);
+                      int month = int.parse(parts[1]);
+                      int year = int.parse(parts[2]);
+                      return day == selectedDate.day &&
+                          month == selectedDate.month &&
+                          year == selectedDate.year;
+                    }
+                    return false;
+                  }).toList();
+
+                  return Column(
                     children: [
-                      Lottie.asset("assets/images/no_data.json", height: 250),
-                      const Text(
-                        "No tasks for this day!",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.grey,
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: sortedDates.map((date) {
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 20),
+                              child: CalendarItem(
+                                month: getMonthName(date.month),
+                                day: date.day.toString(),
+                                weekDay: getDayName(date.weekday),
+                                isSelected: selectedDate.day == date.day &&
+                                    selectedDate.month == date.month &&
+                                    selectedDate.year == date.year,
+                                onTap: () =>
+                                    setState(() => selectedDate = date),
+                              ),
+                            );
+                          }).toList(),
                         ),
                       ),
+                      const SizedBox(height: 30),
+                      if (filteredTasks.isEmpty)
+                        Center(
+                          child: Column(
+                            children: [
+                              Lottie.asset("assets/images/no_data.json",
+                                  height: 250),
+                              const Text(
+                                "No tasks for this day!",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      else
+                        ...filteredTasks
+                            .map((task) => dismissibleTask(task))
+                            .toList(),
                     ],
-                  ),
-                )
-              else
-                ...filteredTasks
-                    .asMap()
-                    .entries
-                    .map((entry) => dismissibleTask(entry.key, entry.value))
-                    .toList(),
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -255,14 +260,16 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget dismissibleTask(int index, model.TaskModel task) {
+  Widget dismissibleTask(TaskModel task) {
     return Dismissible(
-      key: UniqueKey(),
-      onDismissed: (direction) async {
-        setState(() {
-          model.tasks.remove(task);
-        });
-        await StorageService.saveTasks(model.tasks);
+      key: Key(task.key.toString()),
+      onDismissed: (direction) {
+        if (direction == DismissDirection.startToEnd) {
+          task.taskStatusText = "completed";
+          task.save();
+        } else {
+          task.delete();
+        }
       },
       background: Container(
         margin: const EdgeInsets.only(bottom: 15),
@@ -315,7 +322,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: task.taskTitle,
         time: "${task.taskStartTime} - ${task.taskEndTime}",
         description: task.taskDescription,
-        color: task.color,
+        color: Color(task.color),
         isCompleted: task.taskStatusText == "completed",
       ),
     );

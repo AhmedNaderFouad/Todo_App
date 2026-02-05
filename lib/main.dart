@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:todo_app/Models/task_model.dart';
 import 'package:todo_app/themes.dart';
 import 'package:todo_app/todo.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(TaskModelAdapter());
+  await Hive.openBox<TaskModel>('tasks');
+
   runApp(const MyApp());
 }
 
